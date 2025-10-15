@@ -17,4 +17,3 @@ Petralia, F., Aushev, V.N., Gopalakrishnan, K., Kappil, M., W Khin, N., Chen, J.
 
 * library(devtools)
 * install_github("petraf01/iJRF")
-* install_github("WangLab-MSSM/BayesDeBulk/BayesDeBulk")
