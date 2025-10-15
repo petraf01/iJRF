@@ -2,7 +2,7 @@
 
 * [Introduction](#introduction)
 * [Citation](#citation)
-* [Installing iJRF package in R](#installing iJRF R package)
+* [Installing iJRF package in R](#installingiJRFRpackage)
 
 
 ## Introduction
