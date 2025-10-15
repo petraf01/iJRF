@@ -3,7 +3,7 @@
 ## Introduction
 The integrative Joint Random Forest (iJRF) algorithm, developed by Petralia et al. (PMID: 26072483, PMID: 26072483 ), provides an integrated framework that includes implementations for both iRafNet and JRF.
 
-IRAFNet (Integrated Regulatory and Functional Network) is a computational framework designed to integrate multi-omic data—such as transcriptomic, proteomic, and epigenomic profiles—to infer gene regulatory and functional interaction networks. By combining probabilistic modeling with prior biological knowledge, IRAFNet identifies key regulatory modules and pathways driving specific phenotypes or disease states.
+IRAFNet (PMID: 26072483) is a computational framework designed to integrate multi-omic data—such as transcriptomic, proteomic, and knock-out experiments to infer gene regulatory networks. By combining probabilistic modeling with prior biological knowledge, IRAFNet identifies key regulatory modules and pathways driving specific phenotypes or disease states.
 
 JRF (Joint Random Forest) is a statistical framework developed to jointly infer co-expression networks across multiple related biological conditions or data sets. Unlike traditional single-condition models, JRF leverages shared information across contexts to improve network reconstruction accuracy while allowing for condition-specific regulatory differences. It employs a joint modeling approach that encourages both sparsity and similarity across inferred networks, capturing conserved and differential gene–gene interactions. This enables the identification of associations that are stable across conditions as well as those that uniquely characterize specific disease states, tissue types, or experimental perturbations.
 
