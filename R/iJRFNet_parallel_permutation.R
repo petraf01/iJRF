@@ -832,7 +832,6 @@ importance <- function(x,  scale=TRUE) {
     sampsize<-rep(0,nclasses)
     
     index.target<-c(round(p/num.targets)*(num.par-1)+1,round(p/num.targets)*num.par);
-    if (num.par==num.targets) index.target[2]<-p
     if (index.target[2]>p) index.target[2]<-p
     if (index.target[1]>p) {print("Error: Maximum number of parallelizations excedeed")} else {
       

@@ -852,13 +852,12 @@ importance <- function(x,  scale=TRUE) {
           covar<-matrix(0,(p-1)*nclasses,tot)             
           y<-matrix(0,nclasses,tot)             
           
-          cov.num<-sum(genes.name!=genes.name[j])
           for (c in 1:nclasses)  {
             y[c,seq(1,sampsize[c])]<-as.matrix(X[[c]][j,])
-            covar[seq((c-1)*(cov.num)+1,c*(cov.num)),seq(1,sampsize[c])]<-X[[c]][genes.name!=genes.name[j],]
+            covar[seq((c-1)*(p-1)+1,c*(p-1)),seq(1,sampsize[c])]<-X[[c]][genes.name!=genes.name[j],]
           }
           jrf.out<-JRF_onetarget(x=covar,y=y,mtry=mtry,importance=TRUE,sampsize=sampsize,nclasses=nclasses,ntree=ntree)
-          for (s in 1:nclasses) imp[genes.name!=genes.name[j],j.s,s]<-importance(jrf.out,scale=FALSE)[seq((cov.num)*(s-1)+1,(cov.num)*(s-1)+cov.num)]  #- save importance score for net1
+          for (s in 1:nclasses) imp[genes.name!=genes.name[j],j.s,s]<-importance(jrf.out,scale=FALSE)[seq((p-1)*(s-1)+1,(p-1)*(s-1)+p-1)]  #- save importance score for net1
           
         }
       }
@@ -912,6 +911,92 @@ importance <- function(x,  scale=TRUE) {
   }
   return(out)
 }
+
+"ptmJRF_parallel" <-
+  function(X, ntree,mtry,genes.name,ptm.name,parallel) {
+    
+    p<-length(genes.name); ptm.p<-length(ptm.name)
+    if (is.null(mtry)) mtry=sqrt(p)
+    num.par<-parallel[1]; num.targets<-parallel[2]
+    nclasses<-length(X)
+    sampsize<-rep(0,nclasses)
+    for (j in 1:nclasses) {  X[[j]] <- t(apply(X[[j]], 1, function(x) { (x - mean(x)) / sd(x) } ))    
+                             sampsize[j]<-dim(X[[j]])[2] }
+    
+    index.target<-c(round(p/num.targets)*(num.par-1)+1,round(p/num.targets)*num.par);
+    if (index.target[2]>p) index.target[2]<-p
+    if (index.target[1]>p) {print("Error: Maximum number of parallelizations excedeed")} else {
+      
+      # --- reorder rows in PTM object X[[1]]
+      X.ptm<-X[[1]]; s=0 ; locptm<-numptm<-rep(0,p)
+      ptm.new<-ptm.name
+      for (j in 1:p){ 
+        ptm.j<-X[[1]][ptm.name==genes.name[j],]
+        n.j<-sum(ptm.name==genes.name[j])
+        X.ptm[seq(s+1,s+n.j),]<-ptm.j
+        locptm[j]<-(s+1)
+        numptm[j]<-n.j
+        ptm.new[seq(s+1,s+n.j)]<-rep(genes.name[j],n.j)
+        s<-s+n.j
+      }
+      X[[1]]<-X.ptm
+      ptm.name<-ptm.new
+      index<-seq(1,p)
+      
+      imp<-array(0,c(p,index.target[2]-index.target[1]+1,nclasses))
+      
+      # -- for loop over target proteins (1)
+      j.s=0; 
+      for (jj in index.target[1]:index.target[2]){ 
+        j.s=j.s+1;
+        index.ptm<-seq(1,ptm.p); 
+        index.ptm<-index.ptm[ptm.name==genes.name[jj]] # - ptm corresponding to target protein
+        imp.momentary<-array(0,c(p,numptm[jj],nclasses)); 
+        k.s<-0
+        
+        # --- extract response and predictors for non-ptm data
+        covar.nptm<-matrix(0,(p-1)*(nclasses-1),max(sampsize))             
+        y.nptm<-matrix(0,nclasses-1,max(sampsize))             
+        for (c in 2:nclasses) {
+          y.nptm[c-1,seq(1,sampsize[c])]<-as.matrix(X[[c]][jj,])
+          covar.nptm[seq((p-1)*(c-2)+1,(p-1)*(c-1)),seq(1,sampsize[c])]<-as.matrix(X[[c]][-jj,])
+        }
+        
+        # -- for loop over ptm corresponding to target protein (2)
+        for (k in 1:numptm[jj]){
+          k.s<-k.s+1
+          y.ptm<-matrix(0,1,max(sampsize)); covar.ptm<-matrix(0,ptm.p-numptm[jj],max(sampsize))  
+          y.ptm[,seq(1,sampsize[1])]<-as.matrix(X[[1]][index.ptm[k],])
+          covar.ptm[,seq(1,sampsize[1])]<-X[[1]][ptm.name!=genes.name[jj],]
+          covar<-rbind(covar.ptm,covar.nptm)
+          y<-rbind(y.ptm,y.nptm)
+          
+          numptm.j<-numptm[-jj]
+          locptm.j<-locptm; 
+          if (jj < p) locptm.j[seq(jj+1,p)]<-locptm.j[seq(jj+1,p)]-numptm[jj]
+          locptm.j<-locptm.j[-jj]
+          
+          rfout<-ptmJRF_onetarget(x=covar,y=y,p=(p-1),mptm=ptm.p-numptm[jj],
+                                  mtry=sqrt(p-1),importance=TRUE,sampsize=sampsize,
+                                  nclasses=nclasses,
+                                  ntree=ntree,numptm=numptm.j,locptm=locptm.j)
+          
+          imp.rfout<-importance(rfout)
+          for (s in 1:nclasses) imp.momentary[-jj,k.s,s]<-imp.rfout[seq((p-1)*(s-1)+1,(p-1)*s)] 
+        } # -- End for loop (2)
+        
+        if (numptm[jj]>1)  {
+          for (c in 1:nclasses) imp[,j.s,c]<-apply(imp.momentary[,,c], 1, function(x) { mean(x) } )
+        } else {
+          for (c in 1:nclasses) imp[,j.s,c]<-imp.momentary[,1,c]        
+        }
+        
+      } # -- End for loop (1)
+      
+      out<-list(num.par=num.par,model="ptmJRF",importance=imp,genes.name=genes.name,ptm.name=ptm.name)
+      return(out)
+    }
+  }
 
 
 # --- MAIN function
