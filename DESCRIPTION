@@ -17,7 +17,7 @@ Imports: ggplot2, stats, igraph
 Description: Integrative framework for the simultaneous estimation of multiple related networks.
 License: GPL (>= 2)
 URL: https://www.r-project.org
-Packaged: 2020-03-06 15:48:18 UTC; petraf01
+Packaged: 2017-03-02 13:29:53 UTC; francescapetralia
 NeedsCompilation: yes
 Author: Francesca Petralia [aut, cre],
   Pei Wang [aut],
