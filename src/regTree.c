@@ -5,9 +5,9 @@
 
    Copyright (C) 2001-7 Leo Breiman, Adele Cutler and Merck & Co., Inc.
 
-   This program is free software; you can redistribute it and/or
+   This program is R_Free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
-   as published by the Free Software Foundation; either version 2
+   as published by the R_Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
 
    This program is distributed in the hope that it will be useful,
@@ -21,7 +21,7 @@
  * original Fortran code.
  *
  *      copyright 1999 by leo Breiman
- *      this is free software and can be used for any purpose.
+ *      this is R_Free software and can be used for any purpose.
  *      It comes with no guarantee.
  *
  ******************************************************************/
@@ -62,19 +62,19 @@ void iJRF_regTree(double *x, double *y, int mdim, int *sampsize,int nsample, int
 
 
 
-    sumnode = (double *) Calloc(nclasses, double);
-    d = (double *) Calloc(nclasses, double);
-    ubest = (double *) Calloc(nclasses, double);
-    ndendl = (int *) Calloc(nclasses, int);
-    nodecnt = (int *) Calloc(nclasses, int);
-    decsplit = (double *) Calloc(nclasses, double);
-    nodestart = (int *) Calloc(nclasses * nrnodes, int);
-    nodepop   = (int *) Calloc(nclasses * nrnodes, int);
-    av         = (double *) Calloc(nclasses, double); /* average for each class */
-    ss         = (double *) Calloc(nclasses, double); /* standard deviation for each class */
-    avnode     = (double *) Calloc(nclasses * nrnodes, double); /* matrix average node x classes */
-    ndstart = (int *) Calloc(nclasses, int);
-    ndend = (int *) Calloc(nclasses, int);
+    sumnode = (double *) R_Calloc(nclasses, double);
+    d = (double *) R_Calloc(nclasses, double);
+    ubest = (double *) R_Calloc(nclasses, double);
+    ndendl = (int *) R_Calloc(nclasses, int);
+    nodecnt = (int *) R_Calloc(nclasses, int);
+    decsplit = (double *) R_Calloc(nclasses, double);
+    nodestart = (int *) R_Calloc(nclasses * nrnodes, int);
+    nodepop   = (int *) R_Calloc(nclasses * nrnodes, int);
+    av         = (double *) R_Calloc(nclasses, double); /* average for each class */
+    ss         = (double *) R_Calloc(nclasses, double); /* standard deviation for each class */
+    avnode     = (double *) R_Calloc(nclasses * nrnodes, double); /* matrix average node x classes */
+    ndstart = (int *) R_Calloc(nclasses, int);
+    ndend = (int *) R_Calloc(nclasses, int);
     
     /* initialize some arrays for the tree */
     zeroInt(nodestatus, nrnodes * nclasses);
@@ -83,7 +83,7 @@ void iJRF_regTree(double *x, double *y, int mdim, int *sampsize,int nsample, int
     
    /* zeroDouble(avnode, nrnodes); */
 
-    jdex = (int *) Calloc(nclasses * nsample, int);
+    jdex = (int *) R_Calloc(nclasses * nsample, int);
     
     ncur = 0;
     for (s = 0; s < nclasses; ++s) {
@@ -233,20 +233,20 @@ void iJRF_regTree(double *x, double *y, int mdim, int *sampsize,int nsample, int
     }
 
     
-    Free(avnode);
-    Free(nodestart);
-    Free(jdex);
-    Free(nodepop);
-    Free(ndstart);
-    Free(ndend);
-    Free(ndendl);
-    Free(nodecnt);
-    Free(av);
-    Free(d);
-    Free(ss);
-    Free(decsplit);
-    Free(ubest);
-    Free(sumnode);
+    R_Free(avnode);
+    R_Free(nodestart);
+    R_Free(jdex);
+    R_Free(nodepop);
+    R_Free(ndstart);
+    R_Free(ndend);
+    R_Free(ndendl);
+    R_Free(nodecnt);
+    R_Free(av);
+    R_Free(d);
+    R_Free(ss);
+    R_Free(decsplit);
+    R_Free(ubest);
+    R_Free(sumnode);
 
     
 }
@@ -269,22 +269,22 @@ void iJRF_findBestSplit(double *x, int *jdex, double *y, int mdim, int nsample,
     double crit, *critmax, *critvar, suml, sumr, d, critParent, sumcritvar, sumcritmax, *weights, *sumweights, sww;
 
     
-    critvar = (double *) Calloc(nclasses, double);
-    critmax = (double *) Calloc(nclasses, double);
-    ubestt = (double *) Calloc(nclasses, double);    
+    critvar = (double *) R_Calloc(nclasses, double);
+    critmax = (double *) R_Calloc(nclasses, double);
+    ubestt = (double *) R_Calloc(nclasses, double);    
 
-    ut = (double *) Calloc(nclasses * nsample, double);
-    xt = (double *) Calloc(nclasses * nsample, double);
-    v  = (double *) Calloc(nsample, double);
-    yl = (double *) Calloc(nsample * nclasses, double);
-    mind  = (int *) Calloc(mdim, int);
-    ncase = (int *) Calloc(nsample, int);
+    ut = (double *) R_Calloc(nclasses * nsample, double);
+    xt = (double *) R_Calloc(nclasses * nsample, double);
+    v  = (double *) R_Calloc(nsample, double);
+    yl = (double *) R_Calloc(nsample * nclasses, double);
+    mind  = (int *) R_Calloc(mdim, int);
+    ncase = (int *) R_Calloc(nsample, int);
     zeroDouble(avcat, 32);
     zeroDouble(tavcat, 32);
 
     mindo=mdim+1;
-    weights =  (double *) Calloc(mdim, double);
-    sumweights = (double *) Calloc(mindo, double);
+    weights =  (double *) R_Calloc(mdim, double);
+    sumweights = (double *) R_Calloc(mindo, double);
 
     /* START BIG LOOP */
     *msplit = -1;
@@ -462,17 +462,17 @@ void iJRF_findBestSplit(double *x, int *jdex, double *y, int mdim, int nsample,
 
   
 	
-    Free(sumweights);
-    Free(weights);
-    Free(ncase);
-    Free(mind);
-    Free(v);
-    Free(yl);
-    Free(xt);
-    Free(ut);
-    Free(ubestt);
-    Free(critmax);
-    Free(critvar);
+    R_Free(sumweights);
+    R_Free(weights);
+    R_Free(ncase);
+    R_Free(mind);
+    R_Free(v);
+    R_Free(yl);
+    R_Free(xt);
+    R_Free(ut);
+    R_Free(ubestt);
+    R_Free(critmax);
+    R_Free(critvar);
     
 
 
@@ -501,7 +501,7 @@ void predictRegTree(double *x, int nsample, int mdim,
      for (s = 0; s < nclasses; ++s) { /* loop over classes */
        
 /*    if (maxcat > 1) {
-        cbestsplit = (int *) Calloc(maxcat * treeSize, int);
+        cbestsplit = (int *) R_Calloc(maxcat * treeSize, int);
         zeroInt(cbestsplit, maxcat * treeSize);
        
         for (i = 0; i < nrnodes; ++i) {
@@ -530,7 +530,7 @@ void predictRegTree(double *x, int nsample, int mdim,
 	nodex[i * nclasses + s] = k + 1;
     } 
      }
-    if (maxcat > 1) Free(cbestsplit);
+    if (maxcat > 1) R_Free(cbestsplit);
 }
 
 
@@ -546,7 +546,7 @@ void permuteOOB(int m, double *x, int *in, int nsample, int mdim, int s, int ncl
     double *tp, tmp;
     int i, last, k, nOOB = 0;
 
-    tp = (double *) Calloc(nsample, double);
+    tp = (double *) R_Calloc(nsample, double);
 
     for (i = 0; i < nsample; ++i) {
   	/* make a copy of the OOB part of the data into tp (for permuting) */
@@ -573,7 +573,7 @@ void permuteOOB(int m, double *x, int *in, int nsample, int mdim, int s, int ncl
             nOOB++;
 		}
     }
-    Free(tp);
+    R_Free(tp);
 }
 
 /**************************************** iRafNet ********************************************/
@@ -587,8 +587,8 @@ void iRafNet_regTree(double *x, double *y, int mdim, int nsample, int *lDaughter
     int ndstart, ndend, ndendl, nodecnt, jstat, msplit;
     double d, ss, av, decsplit, ubest, sumnode;
 
-    nodestart = (int *) Calloc(nrnodes, int);
-    nodepop   = (int *) Calloc(nrnodes, int);
+    nodestart = (int *) R_Calloc(nrnodes, int);
+    nodepop   = (int *) R_Calloc(nrnodes, int);
 
     /* initialize some arrays for the tree */
     zeroInt(nodestatus, nrnodes);
@@ -597,7 +597,7 @@ void iRafNet_regTree(double *x, double *y, int mdim, int nsample, int *lDaughter
     zeroDouble(avnode, nrnodes);
 
 
-    jdex = (int *) Calloc(nsample, int);
+    jdex = (int *) R_Calloc(nsample, int);
     for (i = 1; i <= nsample; ++i) jdex[i-1] = i;
 
     ncur = 0;
@@ -693,9 +693,9 @@ void iRafNet_regTree(double *x, double *y, int mdim, int nsample, int *lDaughter
             nodestatus[k] = NODE_TERMINAL;
         }
     }
-    Free(nodestart);
-    Free(jdex);
-    Free(nodepop);
+    R_Free(nodestart);
+    R_Free(jdex);
+    R_Free(nodepop);
     
 }
 
@@ -708,20 +708,20 @@ void iRafNet_findBestSplit(double *x, int *jdex, double *y, int mdim, int nsampl
     double *xt, *ut, *v, *yl, sumcat[32], avcat[32], tavcat[32], ubestt, wsel ,jk;
     double crit, critmax, critvar, suml, sumr, d, critParent, *weights, *sumweights, sww;
 
-    ut = (double *) Calloc(nsample, double);
-    xt = (double *) Calloc(nsample, double);
-    v  = (double *) Calloc(nsample, double);
-    yl = (double *) Calloc(nsample, double);
+    ut = (double *) R_Calloc(nsample, double);
+    xt = (double *) R_Calloc(nsample, double);
+    v  = (double *) R_Calloc(nsample, double);
+    yl = (double *) R_Calloc(nsample, double);
 
-    mind  = (int *) Calloc(mdim, int);
-    ncase = (int *) Calloc(nsample, int);
+    mind  = (int *) R_Calloc(mdim, int);
+    ncase = (int *) R_Calloc(nsample, int);
     zeroDouble(avcat, 32);
     zeroDouble(tavcat, 32);
 
    
     mindo=mdim+1;
-    weights =      (double *) Calloc(mdim, double);
-    sumweights =      (double *) Calloc(mindo, double);
+    weights =      (double *) R_Calloc(mdim, double);
+    sumweights =      (double *) R_Calloc(mindo, double);
     
     /* START BIG LOOP */
     *msplit = -1;
@@ -877,14 +877,14 @@ void iRafNet_findBestSplit(double *x, int *jdex, double *y, int mdim, int nsampl
         }
     } else *jstat = 1;
 	
-    Free(ncase);
-    Free(mind);
-    Free(v);
-    Free(yl);
-    Free(xt);
-    Free(ut);
-    Free(weights);
-    Free(sumweights);
+    R_Free(ncase);
+    R_Free(mind);
+    R_Free(v);
+    R_Free(yl);
+    R_Free(xt);
+    R_Free(ut);
+    R_Free(weights);
+    R_Free(sumweights);
     
     
 }
@@ -905,18 +905,18 @@ void JRF_regTree(double *x, double *y, int mdim, int *sampsize,int nsample, int 
     sumnode = (double *) S_alloc(nclasses, sizeof(double));
     d = (double *) S_alloc(nclasses, sizeof(double));
     ubest = (double *) S_alloc(nclasses, sizeof(double));
-    ndendl = (int *) Calloc(nclasses, int);
-    nodecnt = (int *) Calloc(nclasses, int);
+    ndendl = (int *) R_Calloc(nclasses, int);
+    nodecnt = (int *) R_Calloc(nclasses, int);
     decsplit = (double *) S_alloc(nclasses, sizeof(double));
     
     
-    nodestart = (int *) Calloc(nclasses * nrnodes, int);
-    nodepop   = (int *) Calloc(nclasses * nrnodes, int);
+    nodestart = (int *) R_Calloc(nclasses * nrnodes, int);
+    nodepop   = (int *) R_Calloc(nclasses * nrnodes, int);
     av         = (double *) S_alloc(nclasses, sizeof(double)); /* average for each class */
     ss         = (double *) S_alloc(nclasses, sizeof(double)); /* standard deviation for each class */
     avnode     = (double *) S_alloc(nclasses * nrnodes, sizeof(double)); /* matrix average node x classes */
-    ndstart = (int *) Calloc(nclasses, int);
-    ndend = (int *) Calloc(nclasses, int);
+    ndstart = (int *) R_Calloc(nclasses, int);
+    ndend = (int *) R_Calloc(nclasses, int);
     
     /* initialize some arrays for the tree */
     zeroInt(nodestatus, nrnodes * nclasses);
@@ -925,7 +925,7 @@ void JRF_regTree(double *x, double *y, int mdim, int *sampsize,int nsample, int 
     
    /* zeroDouble(avnode, nrnodes); */
 
-    jdex = (int *) Calloc(nclasses * nsample, int);
+    jdex = (int *) R_Calloc(nclasses * nsample, int);
     
     ncur = 0;
     for (s = 0; s < nclasses; ++s) {
@@ -1066,13 +1066,13 @@ void JRF_regTree(double *x, double *y, int mdim, int *sampsize,int nsample, int 
         
 
     }
-    Free(nodestart);
-    Free(jdex);
-    Free(nodepop);
-    Free(ndendl);
-    Free(nodecnt);
-    Free(nodestart);
-    Free(ndend);
+    R_Free(nodestart);
+    R_Free(jdex);
+    R_Free(nodepop);
+    R_Free(ndendl);
+    R_Free(nodecnt);
+    R_Free(nodestart);
+    R_Free(ndend);
       
 }
 
@@ -1090,16 +1090,16 @@ void JRF_findBestSplit(double *x, int *jdex, double *y, int mdim, int nsample,
     double crit, *critmax, *critvar, suml, sumr, d, critParent, sumcritvar, sumcritmax;
 
     
-    critvar = (double *) Calloc(nclasses, double);
-    critmax = (double *) Calloc(nclasses, double);
-    ubestt = (double *) Calloc(nclasses, double);
+    critvar = (double *) R_Calloc(nclasses, double);
+    critmax = (double *) R_Calloc(nclasses, double);
+    ubestt = (double *) R_Calloc(nclasses, double);
   
-    ut = (double *) Calloc(nclasses * nsample, double);
-    xt = (double *) Calloc(nclasses * nsample, double);
-    v  = (double *) Calloc(nsample, double);
-    yl = (double *) Calloc(nsample * nclasses, double);
-    mind  = (int *) Calloc(mdim, int);
-    ncase = (int *) Calloc(nsample, int);
+    ut = (double *) R_Calloc(nclasses * nsample, double);
+    xt = (double *) R_Calloc(nclasses * nsample, double);
+    v  = (double *) R_Calloc(nsample, double);
+    yl = (double *) R_Calloc(nsample * nclasses, double);
+    mind  = (int *) R_Calloc(mdim, int);
+    ncase = (int *) R_Calloc(nsample, int);
     zeroDouble(avcat, 32);
     zeroDouble(tavcat, 32);
 
@@ -1252,15 +1252,15 @@ void JRF_findBestSplit(double *x, int *jdex, double *y, int mdim, int nsample,
       }
     } else *jstat = 1;      /* If best split can not be found, set to terminal node and return. */
 
-    Free(ncase);
-    Free(mind);
-    Free(v);
-    Free(yl);
-    Free(xt);
-    Free(ut);
-    Free(critvar);
-    Free(critmax);  
-    Free(ubestt);
+    R_Free(ncase);
+    R_Free(mind);
+    R_Free(v);
+    R_Free(yl);
+    R_Free(xt);
+    R_Free(ut);
+    R_Free(critvar);
+    R_Free(critmax);  
+    R_Free(ubestt);
 }
 
 /*************************************** ptmJRF *******************************************/
@@ -1285,17 +1285,17 @@ void ptmJRF_regTree(double *x, double *y, int mdim, int *sampsize,int nsample, i
     sumnode = (double *) S_alloc(nclasses, sizeof(double));
     d = (double *) S_alloc(nclasses, sizeof(double));
     ubest = (double *) S_alloc(nclasses, sizeof(double));
-    ndendl = (int *) Calloc(nclasses, int);
-    nodecnt = (int *) Calloc(nclasses, int);
+    ndendl = (int *) R_Calloc(nclasses, int);
+    nodecnt = (int *) R_Calloc(nclasses, int);
     decsplit = (double *) S_alloc(nclasses, sizeof(double));
     
-    nodestart = (int *) Calloc(nclasses * nrnodes, int);
-    nodepop   = (int *) Calloc(nclasses * nrnodes, int);
+    nodestart = (int *) R_Calloc(nclasses * nrnodes, int);
+    nodepop   = (int *) R_Calloc(nclasses * nrnodes, int);
     av         = (double *) S_alloc(nclasses, sizeof(double)); /* average for each class */
     ss         = (double *) S_alloc(nclasses, sizeof(double)); /* standard deviation for each class */
     avnode     = (double *) S_alloc(nclasses * nrnodes, sizeof(double)); /* matrix average node x classes */
-    ndstart = (int *) Calloc(nclasses, int);
-    ndend = (int *) Calloc(nclasses, int);
+    ndstart = (int *) R_Calloc(nclasses, int);
+    ndend = (int *) R_Calloc(nclasses, int);
     
 
     /* initialize some arrays for the tree */
@@ -1305,7 +1305,7 @@ void ptmJRF_regTree(double *x, double *y, int mdim, int *sampsize,int nsample, i
     
    /* zeroDouble(avnode, nrnodes); */
 
-    jdex = (int *) Calloc(nclasses * nsample, int);
+    jdex = (int *) R_Calloc(nclasses * nsample, int);
     
     ncur = 0;
     for (s = 0; s < nclasses; ++s) {
@@ -1454,13 +1454,13 @@ void ptmJRF_regTree(double *x, double *y, int mdim, int *sampsize,int nsample, i
 
 
     
-    Free(nodestart);
-    Free(jdex);
-    Free(nodepop);
-    Free(ndendl);
-    Free(nodecnt);
-    Free(ndstart);
-    Free(ndend);
+    R_Free(nodestart);
+    R_Free(jdex);
+    R_Free(nodepop);
+    R_Free(ndendl);
+    R_Free(nodecnt);
+    R_Free(ndstart);
+    R_Free(ndend);
     
 }
 
@@ -1479,15 +1479,15 @@ void ptmJRF_findBestSplit(double *x, int *jdex, double *y, int mdim, int nsample
     double crit, *critmax, *critvar, suml, sumr, d, critParent, sumcritvar, sumcritmax;
 
     
-    critvar = (double *) Calloc(nclasses, double);
-    critmax = (double *) Calloc(nclasses, double);
-    ubestt = (double *) Calloc(nclasses, double);  
-    ut = (double *) Calloc(nclasses * nsample, double);
-    xt = (double *) Calloc(nclasses * nsample, double);
-    v  = (double *) Calloc(nsample, double);
-    yl = (double *) Calloc(nsample * nclasses, double);
-    mind  = (int *) Calloc(mdim, int);
-    ncase = (int *) Calloc(nsample, int);
+    critvar = (double *) R_Calloc(nclasses, double);
+    critmax = (double *) R_Calloc(nclasses, double);
+    ubestt = (double *) R_Calloc(nclasses, double);  
+    ut = (double *) R_Calloc(nclasses * nsample, double);
+    xt = (double *) R_Calloc(nclasses * nsample, double);
+    v  = (double *) R_Calloc(nsample, double);
+    yl = (double *) R_Calloc(nsample * nclasses, double);
+    mind  = (int *) R_Calloc(mdim, int);
+    ncase = (int *) R_Calloc(nsample, int);
     zeroDouble(avcat, 32);
     zeroDouble(tavcat, 32);
     
@@ -1646,15 +1646,15 @@ void ptmJRF_findBestSplit(double *x, int *jdex, double *y, int mdim, int nsample
 
   
 	
-    Free(ncase);
-    Free(mind);
-    Free(v);
-    Free(yl);
-    Free(xt);
-    Free(ut);
-    Free(critvar);
-    Free(critmax);  
-    Free(ubestt);
+    R_Free(ncase);
+    R_Free(mind);
+    R_Free(v);
+    R_Free(yl);
+    R_Free(xt);
+    R_Free(ut);
+    R_Free(critvar);
+    R_Free(critmax);  
+    R_Free(ubestt);
   
 
 }
